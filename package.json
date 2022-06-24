@@ -1,0 +1,23 @@
+{
+  "name": "shoppingstore",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mr-loop-1/ShoppingStore.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mr-loop-1/ShoppingStore/issues"
+  },
+  "homepage": "https://github.com/mr-loop-1/ShoppingStore#readme",
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "ejs": "^3.1.8"
+  }
+}
