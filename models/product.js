@@ -1,66 +1,52 @@
-
 const fs = require('fs');
 const path = require('path');
 
-const p = path.join(__dirname, '..', 'data', 'message.json');
+const p = path.join(
+  path.dirname(process.mainModule.filename),
+  'data',
+  'products.json'
+);
 
-const readDataFromFile = (customCb) => {
-    fs.readFile(p, (err, content) => {
-        if(!err) {
-            customCb(JSON.parse(content));
-        }
-        else customCb([]);
-    }) 
-}
- 
-module.exports = class {
-
-    constructor(title) {
-        this.title = title;
+const getProductsFromFile = cb => {
+  fs.readFile(p, (err, fileContent) => {
+    if (err) {
+      cb([]);
+    } else {
+      cb(JSON.parse(fileContent));
     }
+  });
+};
 
-    save() {
-        readDataFromFile(data => {
-            data.push(this);
-            fs.writeFile(p, JSON.stringify(data), err => {
-                console.log(err);
-            });
-        })
-    }
+module.exports = class Product {
+  constructor(title, imageUrl, description, price) {
+    this.title = title;
+    this.imageUrl = imageUrl;
+    this.description = description;
+    this.price = price;
+  }
 
-    static fetchAll(cb) { 
-        readDataFromFile(cb);
-    }
- 
-} 
+  save() {
+    this.id = Math.random().toString();
+    getProductsFromFile(products => {
+      products.push(this);
+      fs.writeFile(p, JSON.stringify(products), err => {
+        console.log(err);
+      });
+    });
+  }
 
-// module.exports = class {
+  static fetchAll(cb) {
+    getProductsFromFile(cb);
+  }
 
-//     constructor(title) {
-//         this.title = title;
-//     }
+  static getProductbyId(id, cb) {
 
-//     save() {
-        
-//         fs.readFile(p, (err, content) => {
-//             let data = [];
-//             if (!err) {
-//                 data = JSON.parse(content)
-//             }
-//             data.push(this);
-//             fs.writeFile(p, JSON.stringify(data), err => {
-//                 console.log(err);
-//             });
-//         });
-//     }
-//     static fetchAll(cb) { 
-//         fs.readFile(p, (err, content) => {
-//             if(!err) {
-//                 console.log(JSON.parse(content));
-//                 cb(JSON.parse(content));
-//             }
-//             cb([]);
-//         })
-//     }
-
-// }
+    getProductsFromFile(products => {
+      const product = products.find(item => {
+        return item.id === id;
+      })
+      console.log(product);
+      cb(product);
+    })
+  }
+};
